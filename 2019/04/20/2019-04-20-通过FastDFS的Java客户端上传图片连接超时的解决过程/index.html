@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Java 后端">
+    <meta name="description" content="小橘子🍊的个人主页，欢迎访问~~">
+    <meta name="author" content="小橘子🍊">
+    
+    <title>
+        
+            通过FastDFS的Java客户端上传图片连接超时的解决过程 |
+        
+        AprilYoLies
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="https://img.aprilyolies.top/img/typora/avatar.jpg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"aprilyolies.top","root":"/","language":"zh-CN","path":"search.json"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"https://img.aprilyolies.top/img/typora/avatar.jpg","favicon":"https://img.aprilyolies.top/img/typora/avatar.jpg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"干燥的空气，尘埃的味道，我在其中…踏上旅途！"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":true},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+  </script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="https://img.aprilyolies.top/img/typora/avatar.jpg">
+                </a>
+            
+            <a class="logo-title" href="/">
+                AprilYoLies
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                关于
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">关于</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">通过FastDFS的Java客户端上传图片连接超时的解决过程</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="https://img.aprilyolies.top/img/typora/avatar.jpg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">小橘子🍊</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2019-04-20 20:38:48</span>
+        <span class="mobile">2019-04-20 20:38</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/">后端开发</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/FastDFS/">FastDFS</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Java/">Java</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <!-- toc -->
+
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>在 <a href="#">Post not found: FastDFS单机环境下的搭建 FastDFS单机环境下的搭建</a> 这篇文章中，我搭建了一个 FastDFS 图片服务器，这里我通过FastDFS提供的命令行工具进行文件上传是成功的，然后就是测试一下通过Java客户端来进行图片的上传操作，很遗憾测试没有通过，控制台打印如下错误信息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">java.net.SocketTimeoutException: connect timed out</span><br><span class="line"></span><br><span class="line">	at java.net.PlainSocketImpl.socketConnect(Native Method)</span><br><span class="line">	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:<span class="number">350</span>)</span><br><span class="line">	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:<span class="number">206</span>)</span><br><span class="line">	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:<span class="number">188</span>)</span><br><span class="line">	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:<span class="number">392</span>)</span><br><span class="line">	at java.net.Socket.connect(Socket.java:<span class="number">589</span>)</span><br><span class="line">	at org.csource.fastdfs.ClientGlobal.getSocket(ClientGlobal.java:<span class="number">208</span>)</span><br><span class="line">	at org.csource.fastdfs.StorageServer.&lt;init&gt;(StorageServer.java:<span class="number">43</span>)</span><br><span class="line">	at org.csource.fastdfs.TrackerClient.getStoreStorage(TrackerClient.java:<span class="number">144</span>)</span><br><span class="line">	at org.csource.fastdfs.StorageClient.newWritableStorageConnection(StorageClient.java:<span class="number">1627</span>)</span><br><span class="line">	at org.csource.fastdfs.StorageClient.do_upload_file(StorageClient.java:<span class="number">639</span>)</span><br><span class="line">	at org.csource.fastdfs.StorageClient.upload_file(StorageClient.java:<span class="number">120</span>)</span><br><span class="line">	at org.csource.fastdfs.StorageClient.upload_file(StorageClient.java:<span class="number">91</span>)</span><br><span class="line">	at org.csource.fastdfs.StorageClient.upload_file(StorageClient.java:<span class="number">73</span>)</span><br><span class="line">	at org.csource.fastdfs.StorageClient1.upload_file1(StorageClient1.java:<span class="number">64</span>)</span><br><span class="line">	at com.eva.utils.FastDFSClient.uploadFile(FastDFSClient.java:<span class="number">36</span>)</span><br><span class="line">	at com.eva.utils.FastDFSClient.uploadFile(FastDFSClient.java:<span class="number">41</span>)</span><br><span class="line">	at com.eva.fastdfs.TestFastDFS.testFastDfsClient(TestFastDFS.java:<span class="number">34</span>)</span><br><span class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</span><br><span class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:<span class="number">62</span>)</span><br><span class="line">	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:<span class="number">43</span>)</span><br><span class="line">	at java.lang.reflect.Method.invoke(Method.java:<span class="number">498</span>)</span><br><span class="line">	at org.junit.runners.model.FrameworkMethod$<span class="number">1.</span>runReflectiveCall(FrameworkMethod.java:<span class="number">50</span>)</span><br><span class="line">	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:<span class="number">12</span>)</span><br><span class="line">	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:<span class="number">47</span>)</span><br><span class="line">	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:<span class="number">17</span>)</span><br><span class="line">	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:<span class="number">325</span>)</span><br><span class="line">	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:<span class="number">78</span>)</span><br><span class="line">	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:<span class="number">57</span>)</span><br><span class="line">	at org.junit.runners.ParentRunner$<span class="number">3.</span>run(ParentRunner.java:<span class="number">290</span>)</span><br><span class="line">	at org.junit.runners.ParentRunner$<span class="number">1.</span>schedule(ParentRunner.java:<span class="number">71</span>)</span><br><span class="line">	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:<span class="number">288</span>)</span><br><span class="line">	at org.junit.runners.ParentRunner.access$<span class="number">000</span>(ParentRunner.java:<span class="number">58</span>)</span><br><span class="line">	at org.junit.runners.ParentRunner$<span class="number">2.</span>evaluate(ParentRunner.java:<span class="number">268</span>)</span><br><span class="line">	at org.junit.runners.ParentRunner.run(ParentRunner.java:<span class="number">363</span>)</span><br><span class="line">	at org.junit.runner.JUnitCore.run(JUnitCore.java:<span class="number">137</span>)</span><br><span class="line">	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:<span class="number">68</span>)</span><br><span class="line">	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:<span class="number">47</span>)</span><br><span class="line">	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:<span class="number">242</span>)</span><br><span class="line">	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:<span class="number">70</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><blockquote>
+<p>我的 FastDFS 搭建在阿里云服务器上，公网IP地址为 119.23.247.86。</p>
+</blockquote>
+<p>通过打印的 stack dump 信息，可以看到最终报错点是个native方法，native方法对于我来说就是一个黑盒，我只能是跟踪他的上一级调用，通过打一个断点进行调试可以看到此方法为 java.net.AbstractPlainSocketImpl.socketConnect(address, port, timeout)，它有三个参数，当前调试的值如下图：</p>
+<blockquote>
+<p>java.net.AbstractPlainSocketImpl</p>
+</blockquote>
+<p><img src="https://img.aprilyolies.top/img/typora/tracker-port.jpeg" alt="tracker-port"></p>
+<p>可以看到当前的端口为 22122 ，也就是说这里将要连接 Tracker 服务器，貌似没啥问题啊？那就直接下一步，发现被调用的 native 方法并没有抛出异常，并且顺利的执行到了 java.net.AbstractPlainSocketImpl.socketConnect(address, port, timeout) 的下一行，控制台也没有任何异常信息，现象如下图：</p>
+<blockquote>
+<p>java.net.AbstractPlainSocketImpl</p>
+</blockquote>
+<p><img src="https://img.aprilyolies.top/img/typora/tracker-ok.jpeg" alt="tracker-ok"></p>
+<p>这就说明并不是Java客户端和tracker建立连接发生错误，于是全速执行，发现代码又重新的停在了 java.net.AbstractPlainSocketImpl.socketConnect(address, port, timeout) 处，现象如下：</p>
+<blockquote>
+<p>java.net.AbstractPlainSocketImpl</p>
+</blockquote>
+<p><img src="https://img.aprilyolies.top/img/typora/storage-port.jpeg" alt="storage-port"></p>
+<p><strong>注意了！！</strong> address 变成了 172.17.45.253，这个值怎么跟跟我的阿里云服务器公网地址不一样呢？另外 port 变成了 23000 这就说明当前是在与 storage 进行连接，先不管那么多，直接下一步看看能不能通过吧，现象如下：</p>
+<blockquote>
+<p>java.net.AbstractPlainSocketImpl</p>
+</blockquote>
+<p><img src="https://img.aprilyolies.top/img/typora/storage-fail.jpeg" alt="storage-fail"></p>
+<p>可以看到代码是直接跳到了 finally 代码块，这就说明在 native 方法的执行过程中发生了异常，根据传入的参数可以推断，port 是么有问题的，唯一的可能就是 address ，毕竟他竟然不是我的阿里云服务器公网地址，那么为什么会出现这个地址呢？在我的 .properties 等相关配置文件中，都没有出现过这个可疑的 ip 地址，所以下一步就是来排查这个可疑的 ip 地址的来源了。</p>
+<p>通过 debug 过程的 stack dump 信息，进行往下跟踪（毕竟是个方法栈嘛~~），可以看到这个可疑的 ip 地址是通过 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.csource.fastdfs.TrackerClient#getStoreStorage(org.csource.fastdfs.TrackerServer, java.lang.String) </span><br></pre></td></tr></table></figure>
+
+<p>这个函数的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip_addr = <span class="keyword">new</span> <span class="title class_">String</span>(pkgInfo.body, ProtoCommon.FDFS_GROUP_NAME_MAX_LEN, ProtoCommon.FDFS_IPADDR_SIZE - <span class="number">1</span>).trim();</span><br></pre></td></tr></table></figure>
+
+<p>这行代码构造出来的，里边的关键参数就是 pkgInfo.body，这个参数是通过当前方法的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ProtoCommon.<span class="type">RecvPackageInfo</span> <span class="variable">pkgInfo</span> <span class="operator">=</span> ProtoCommon.recvPackage(trackerSocket.getInputStream(), ProtoCommon.TRACKER_PROTO_CMD_RESP, ProtoCommon.TRACKER_QUERY_STORAGE_STORE_BODY_LEN);</span><br></pre></td></tr></table></figure>
+
+<p>构建的，这里的 trackerSocket.getInputStream() 是一个流对象，并且是从 trackerSocket 中获取的，于是猜测可疑 ip 就是通过 tracker 服务器传输过来的，现在我们需要深入这行代码，探究具体的接收过程，详细的操作在下边这个方法中执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> RecvPackageInfo <span class="title function_">recvPackage</span><span class="params">(InputStream in, <span class="type">byte</span> expect_cmd, <span class="type">long</span> expect_body_len)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="comment">// 输入流中数据的</span></span><br><span class="line">    <span class="type">RecvHeaderInfo</span> <span class="variable">header</span> <span class="operator">=</span> recvHeader(in, expect_cmd, expect_body_len);</span><br><span class="line">    <span class="keyword">if</span> (header.errno != <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RecvPackageInfo</span>(header.errno, <span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 存储数据流中的数据</span></span><br><span class="line">    <span class="type">byte</span>[] body = <span class="keyword">new</span> <span class="title class_">byte</span>[(<span class="type">int</span>) header.body_len];</span><br><span class="line">    <span class="type">int</span> <span class="variable">totalBytes</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">remainBytes</span> <span class="operator">=</span> (<span class="type">int</span>) header.body_len;</span><br><span class="line">    <span class="type">int</span> bytes;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (totalBytes &lt; header.body_len) &#123;</span><br><span class="line">      <span class="comment">// 将流中的数据读入到boby中</span></span><br><span class="line">      <span class="keyword">if</span> ((bytes = in.read(body, totalBytes, remainBytes)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      totalBytes += bytes;</span><br><span class="line">      remainBytes -= bytes;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (totalBytes != header.body_len) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IOException</span>(<span class="string">&quot;recv package size &quot;</span> + totalBytes + <span class="string">&quot; != &quot;</span> + header.body_len);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将body封装成RecvPackageInfo</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RecvPackageInfo</span>((<span class="type">byte</span>) <span class="number">0</span>, body);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码还是很简单的，这个方法返回后就是通过 RecvPackageInfo 来构造这个可疑的 storage 的 ip 地址了。</p>
+<p>既然可疑的 ip 地址来自 trackerSockt 的输入流，为什么 tracker 会返回这个 ip 地址呢？立即联想到这个 ip 可能是阿里云服务器的内网地址，于是进行查看，与所想一样，那么现在可以将问题缩小到 tracker 误将服务器的内网地址当公网地址返回给客户端了，于是核验 tracker 和 storage 配置文件，果然是自己在进行配置时，误将内网地址填写为了公网地址。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>tcp、ip、udp 相关的知识又淡忘了，抽空复习一下 tcp 拥塞控制、慢启动相关的内容。</li>
+<li>这里的公网 ip、内网 ip 啥意思呢？类似于虚拟机通过 nat 组网的那种模式吗？宿主机的 ip 地址就是公网ip，和虚拟机相连的那块虚拟网卡分配的 ip 为内网 ip？</li>
+</ul>
+
+        </div>
+
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/FastDFS/">#FastDFS</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/Java/">#Java</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2019/04/24/2019-04-24-Git%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E6%80%BB%E7%BB%93/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Git常用指令总结</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2019/04/20/2019-04-20-Java%E5%BC%80%E5%8F%91%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E7%B1%BB%E6%B1%87%E6%80%BB/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Java开发常用工具类汇总</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">小橘子🍊</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        访问人数&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            KEEP.refresh();
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
