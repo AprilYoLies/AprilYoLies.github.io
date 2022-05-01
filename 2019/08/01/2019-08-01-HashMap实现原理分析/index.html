@@ -23,7 +23,7 @@
     <script id="hexo-configurations">
     let KEEP = window.KEEP || {};
     KEEP.hexo_config = {"hostname":"aprilyolies.top","root":"/","language":"zh-CN","path":"search.json"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"https://img.aprilyolies.top/img/typora/avatar.jpg","favicon":"https://img.aprilyolies.top/img/typora/avatar.jpg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"干燥的空气，尘埃的味道，我在其中…踏上旅途！"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"https://img.aprilyolies.top/img/typora/avatar.jpg","favicon":"https://img.aprilyolies.top/img/typora/avatar.jpg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"干燥的空气，尘埃的味道，我在其中…踏上旅途！"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
     KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
   </script>
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -279,7 +279,7 @@
 </li>
 </ul>
 <p>其实，最理想的效果是，Entry 数组中每个位置都只有一个元素，这样查询的时候效率最高，不需要遍历单链表，也不需要通过equals 去比较 Key，而且空间利用率最大。链地址法使我们的数组转变成了链表的数组，其结构如下：</p>
-<div style="text-align:center;"><img src="https://img.aprilyolies.top/img/typora/452ffc469f9b34b7598b49a04ceba8e7.jpg" width=600 /></div>
+<div style="text-align:center;"><img src="https://img.aprilyolies.top/img/typora/452ffc469f9b34b7598b49a04ceba8e7.jpeg" width=600 /></div>
 
 <center>HashMap 的数组加链表结构</center>
 
@@ -290,7 +290,7 @@
 
 <h2 id="链表长度过长怎么办"><a href="#链表长度过长怎么办" class="headerlink" title="链表长度过长怎么办"></a>链表长度过长怎么办</h2><p>我们知道，链表查找只能通过顺序查找来实现，因此，时间复杂度为 o(n)，如果很不巧，我们的 key 值被 Hash 算法映射到一个存储桶上，将会导致存储桶上的链表长度越来越长，此时，数组查找退化成链表查找，则时间复杂度由原来的 o(1) 退化成 o(n)。</p>
 <p>为了解决这一问题，在 java8 中，当链表长度超过 8 之后，将会自动将链表转换成红黑树，以实现 o(log n) 的时间复杂度，从而提升查找性能。</p>
-<div style="text-align:center;"><img src="https://img.aprilyolies.top/img/typora/7f714e97d8ecdf37bbaba1e52aeffff3.jpg" width=600 /></div>
+<div style="text-align:center;"><img src="https://img.aprilyolies.top/img/typora/7f714e97d8ecdf37bbaba1e52aeffff3.jpeg" width=600 /></div>
 
 <center>HashMap 的数组加链表或者红黑树结构</center>
 
@@ -350,7 +350,7 @@
 <p>综上我们知道，这段代码的意义就是将原来的链表拆分成两个链表，并将这两个链表分别放到新的 table 的 j 位置和 j+oldCap 上, j 位置就是原链表在原 table 中的位置，拆分的标准就是下边的代码，具体的过程可以通过下边的示意图进行说明。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(e.hash &amp; oldCap) == <span class="number">0</span></span><br></pre></td></tr></table></figure>
 
-<div style="text-align:center;"><img src="https://img.aprilyolies.top/img/typora/a64f249f17673c528b8c07f554033c91.jpg" width=600 /></div>
+<div style="text-align:center;"><img src="https://img.aprilyolies.top/img/typora/a64f249f17673c528b8c07f554033c91.jpeg" width=600 /></div>
 
 <center>HashMap resize 过程链表拆分示意图</center>
 

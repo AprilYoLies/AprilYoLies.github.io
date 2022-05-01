@@ -23,7 +23,7 @@
     <script id="hexo-configurations">
     let KEEP = window.KEEP || {};
     KEEP.hexo_config = {"hostname":"aprilyolies.top","root":"/","language":"zh-CN","path":"search.json"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"https://img.aprilyolies.top/img/typora/avatar.jpg","favicon":"https://img.aprilyolies.top/img/typora/avatar.jpg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"干燥的空气，尘埃的味道，我在其中…踏上旅途！"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"https://img.aprilyolies.top/img/typora/avatar.jpg","favicon":"https://img.aprilyolies.top/img/typora/avatar.jpg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"干燥的空气，尘埃的味道，我在其中…踏上旅途！"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
     KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
   </script>
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -254,10 +254,10 @@
 </tbody></table>
 <p>从上表可以看出来两种颗粒度的 id 占用的长度都是 63 位数，刚好可以使用一个长整型数据来进行存储，剩余一位没有使用，方便以后拓展使用。对于秒颗粒度而言，一年 31536000 秒占用 25 位，时间戳剩余 6 位，也就是说这种方式产生的 id 能用 64 年（非精确计算），而序列号占用 22 位，折算后可以知道理论情况下，一秒内单台 id 服务器最多能生成 4194303 个 id。对于毫秒颗粒度而言，一年 31536000000 毫秒占用 35 位，剩余 6 位，同样可以使用 64 年（非精确计算），由于时间戳长度的增加导致序列号的长度被压缩为 12 位，这样理论情况下，单台 id 服务器一毫秒内最多能产生 4096 个 id。</p>
 <h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><h3 id="内嵌服务发布模式"><a href="#内嵌服务发布模式" class="headerlink" title="内嵌服务发布模式"></a>内嵌服务发布模式</h3><p>内嵌服务发布模式需要使用到 rpc 框架，在 snowflake 中用于产生 id 的服务接口为 <code>top.aprilyolies.snowflake.idservice.IdService</code>，可以看到它的实现类有两个，SegmentIdService 和 SnowflakeIdService，分别对应两种 id 的生成方式，他们的继承关系如下图：</p>
-<div style="text-align:center;"><img src="https://img.aprilyolies.top/img/typora/3028ad529899a66477d7b1c26bcba6d8.jpg" width=500 /></div>
+<div style="text-align:center;"><img src="https://img.aprilyolies.top/img/typora/3028ad529899a66477d7b1c26bcba6d8.jpeg" width=500 /></div>
 
 <p>了解这个以后，我们便知道在 rpc 框架中，需要暴露的服务名称就是这个接口的全限定名。在服务端，除了要暴露服务外，还要指定对应的服务实现，这是我是通过 spring 的 FactoryBean 机制来避免直接构建 IdService 实现类，简单来说我们在使用 rpc 框架指定服务实现类时，不是直接使用的 IdService 实现类，而是通过 FactoryBean 来构建对应的 IdService 实现类，这么说可能有点绕，还是直接看示例程序比较合适，项目的工程结构如下：</p>
-<div style="text-align:center;"><img src="https://img.aprilyolies.top/img/typora/cb74453427824b8b49bcfa40553967a4.jpg" width=250 /></div>
+<div style="text-align:center;"><img src="https://img.aprilyolies.top/img/typora/cb74453427824b8b49bcfa40553967a4.jpeg" width=250 /></div>
 
 <p>内嵌服务发布的实例程序就在 snowflake-demo 模块之下，再次说明这里我使用的是自己开发的 rpc 框架 beehive，如果你使用的是其他类型的 rpc 框架，方式也基本一致。先看服务发布端的 spring 配置文件：</p>
 <blockquote>
