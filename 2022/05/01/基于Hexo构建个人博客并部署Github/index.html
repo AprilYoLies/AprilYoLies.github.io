@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Java 后端">
+    <meta name="description" content="小橘子🍊的个人主页，欢迎访问~~">
+    <meta name="author" content="小橘子🍊">
+    
+    <title>
+        
+            基于Hexo构建个人博客并部署Github |
+        
+        AprilYoLies
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="https://img.aprilyolies.top/img/typora/avatar.jpg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"aprilyolies.top","root":"/","language":"zh-CN","path":"search.json"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"https://img.aprilyolies.top/img/typora/avatar.jpg","favicon":"https://img.aprilyolies.top/img/typora/avatar.jpg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"干燥的空气，尘埃的味道，我在其中…踏上旅途！"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+  </script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="https://img.aprilyolies.top/img/typora/avatar.jpg">
+                </a>
+            
+            <a class="logo-title" href="/">
+                AprilYoLies
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                关于
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">关于</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">基于Hexo构建个人博客并部署Github</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="https://img.aprilyolies.top/img/typora/avatar.jpg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">小橘子🍊</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-05-01 12:23:23</span>
+        <span class="mobile">2022-05-01 12:23</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/hexo/">hexo</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/hexo/">hexo</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p><a class="link"   target="_blank" rel="noopener" href="https://hexo.io/zh-cn/" >hexo<i class="fas fa-external-link-alt"></i></a> 是一款快速、简洁且高效的博客框架，本文介绍了如何基于 hexo 构建自己的博客，并将个人博客部署到 github 的 pages 服务，以供他人访问。</p>
+<h2 id="构建个人博客"><a href="#构建个人博客" class="headerlink" title="构建个人博客"></a>构建个人博客</h2><h3 id="安装-hexo"><a href="#安装-hexo" class="headerlink" title="安装 hexo"></a>安装 hexo</h3><p>hexo 的安装依赖于 <a class="link"   target="_blank" rel="noopener" href="https://nodejs.org/en/" >node.js 的安装<i class="fas fa-external-link-alt"></i></a> ，自行从 node.js 官网下载安装包进行安装即可，可以通过如下命令确认 node.js 是否安装 ok。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm --version</span><br></pre></td></tr></table></figure>
+
+<p>确定 node.js 安装 ok 后，通过如下命令安装 hexo 并确认 hexo 安装 ok。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br><span class="line">hexo v</span><br></pre></td></tr></table></figure>
+
+<h3 id="hexo-的基本使用"><a href="#hexo-的基本使用" class="headerlink" title="hexo 的基本使用"></a>hexo 的基本使用</h3><p>hexo 安装 ok 后通过如下命令初始化个人博客，并在本地进行部署，此时可以点击控制台的输出地址查看个人博客的界面。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.aprilyolies.top/img/typora/202205012220152.jpg" alt="Xnip2022-05-01_22-19-53"> </p>
+<p>hexo 的常用命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动本地博客服务</span></span><br><span class="line">hexo server</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">发布文章</span></span><br><span class="line">hexo new post &quot;文章标题&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建草稿文档</span></span><br><span class="line">hexo new draft &quot;文档标题&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">发布草稿文档</span></span><br><span class="line">hexo publish post &quot;文档标题&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成博客</span></span><br><span class="line">hexo g</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">清理博客</span></span><br><span class="line">hexo clean</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">部署博客（下一小节说明）</span></span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<h2 id="部署个人博客"><a href="#部署个人博客" class="headerlink" title="部署个人博客"></a>部署个人博客</h2><h3 id="创建个人-github-仓库"><a href="#创建个人-github-仓库" class="headerlink" title="创建个人 github 仓库"></a>创建个人 github 仓库</h3><p>github 提供 pages 服务，可供部署个人博客，<strong>用于个人博客部署的仓库的名字必须为&lt;你的 GitHub 用户名&gt;.github.io</strong>。这样设置后，访问你的个人博客的地址就是 <code>&lt;你的 GitHub 用户名&gt;.github.io</code>。</p>
+<h3 id="hexo-部署-github-配置"><a href="#hexo-部署-github-配置" class="headerlink" title="hexo 部署 github 配置"></a>hexo 部署 github 配置</h3><p>hexo 部署 github 依赖于 hexo-deployer-git 插件，可通过下述命令进行安装。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>安装完成后，需要将新建的用于部署个人博客的仓库地址添加到 hexo 部署插件配置中。在 hexo 的配置文件 _config.yml 中新加如下配置，repo 的值替换为你的个人博客地址。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/AprilYoLies/aprilyolies.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+
+<p>完成后，可通过 <code>hexo g</code> 和 <code>hexo d</code> 生成博客文件并将其部署到个人仓库中。</p>
+<h3 id="自定义博客域名（可选）"><a href="#自定义博客域名（可选）" class="headerlink" title="自定义博客域名（可选）"></a>自定义博客域名（可选）</h3><p>默认情况下通过上述方法部署的博客，访问的域名为 <code>&lt;你的 GitHub 用户名&gt;.github.io</code>，有时我们需要使用自己的域名来访问自己的博客，此时需要使用到域名的 cname 方案。</p>
+<p>首先我们需要拥有自己的域名，这个可以自行在云服务提供商那边备案后进行申请购买。完成后我们需要对域名进行 cname 解析配置，可以进入云平台的域名解析控制台进行配置。下图就是阿里云的配置方式，注意需要选择记录类型为 cname，其中主机记录为预期域名，记录值为目标域名（<code>&lt;你的 GitHub 用户名&gt;.github.io</code>），这样设置后就可以通过预期域名映射到你的个人博客域名。</p>
+<p><img src="https://img.aprilyolies.top/img/typora/202205012314031.jpg" alt="Xnip2022-05-01_23-13-36"> </p>
+<p>这样配置后，github 那边还不认同这条 cname 映射，需要在 github 的个人仓库添加一条 cname 记录，可以在仓库设置的 pages 选项中进行设置。</p>
+<p><img src="https://img.aprilyolies.top/img/typora/202205012320210.jpg" alt="Xnip2022-05-01_23-20-10"> </p>
+<h2 id="博客撰写优化"><a href="#博客撰写优化" class="headerlink" title="博客撰写优化"></a>博客撰写优化</h2><p>hexo 有很多好看到主题，可以使博客界面各具特色，个人根据自己的爱好进行安装即可，我当前正在使用的就是 hexo-theme-keep 这款。</p>
+<ul>
+<li>hexo-theme-keep 主题的<a class="link"   target="_blank" rel="noopener" href="https://github.com/AprilYoLies/hexo-theme-keep/tree/personal" >个性化配置<i class="fas fa-external-link-alt"></i></a> </li>
+<li>hexo 博客站点的<a class="link"   target="_blank" rel="noopener" href="https://github.com/AprilYoLies/aprilyolies" >个性化配置<i class="fas fa-external-link-alt"></i></a> （私人）</li>
+</ul>
+<p>另外 hexo 博客的撰写主要是基于 markdown 文档，推荐使用 typora 这款 markdown 文档编辑软件，博客撰写过程中经常需要插入图片，可配合 picgo 这款插件来高效完成图片的插入上传工作，可供参考的阿里云图床配置如下。</p>
+<p><img src="https://img.aprilyolies.top/img/typora/202205012333947.jpg" alt="Xnip2022-05-01_23-33-04"> </p>
+<p>阿里云对象存储域名个性化配置如下：</p>
+<p><img src="https://img.aprilyolies.top/img/typora/202205012338655.jpg" alt="Xnip2022-05-01_23-35-36"> </p>
+<p>设置 typora 插入图片后自动上传，即可实现图片插入的同时同步上传阿里云对象存储，生成的图片 url 也是阿里云对象存储中的线上地址，这样就永远不会担心图片丢失。</p>
+
+        </div>
+
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/hexo/">#hexo</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2019/08/01/HashMap%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">HashMap实现原理分析</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">小橘子🍊</a>
+        </div>
+        
+            <script async  src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        访问人数&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2"><span class="nav-number">2.</span> <span class="nav-text">构建个人博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-hexo"><span class="nav-number">2.1.</span> <span class="nav-text">安装 hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo-%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">hexo 的基本使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2"><span class="nav-number">3.</span> <span class="nav-text">部署个人博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA-github-%E4%BB%93%E5%BA%93"><span class="nav-number">3.1.</span> <span class="nav-text">创建个人 github 仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo-%E9%83%A8%E7%BD%B2-github-%E9%85%8D%E7%BD%AE"><span class="nav-number">3.2.</span> <span class="nav-text">hexo 部署 github 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8D%9A%E5%AE%A2%E5%9F%9F%E5%90%8D%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">自定义博客域名（可选）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%9A%E5%AE%A2%E6%92%B0%E5%86%99%E4%BC%98%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">博客撰写优化</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+</body>
+</html>

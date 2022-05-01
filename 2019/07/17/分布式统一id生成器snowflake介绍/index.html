@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Java 后端">
+    <meta name="description" content="小橘子🍊的个人主页，欢迎访问~~">
+    <meta name="author" content="小橘子🍊">
+    
+    <title>
+        
+            分布式统一id生成器snowflake介绍 |
+        
+        AprilYoLies
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="https://img.aprilyolies.top/img/typora/avatar.jpg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"aprilyolies.top","root":"/","language":"zh-CN","path":"search.json"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"https://img.aprilyolies.top/img/typora/avatar.jpg","favicon":"https://img.aprilyolies.top/img/typora/avatar.jpg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"干燥的空气，尘埃的味道，我在其中…踏上旅途！"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+  </script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="https://img.aprilyolies.top/img/typora/avatar.jpg">
+                </a>
+            
+            <a class="logo-title" href="/">
+                AprilYoLies
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                关于
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">关于</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">分布式统一id生成器snowflake介绍</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="https://img.aprilyolies.top/img/typora/avatar.jpg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">小橘子🍊</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2019-07-17 14:56:34</span>
+        <span class="mobile">2019-07-17 14:56</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/">后台开发</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/AprilYoLies/snowflake" >项目地址<i class="fas fa-external-link-alt"></i></a><br>好久没有写技术博客了，实在是因为自己比较忙，花了将近两个月的时间完成了两个开源小项目，这篇文章要介绍的就是其中一个，我将它的名字叫做 <a class="link"   target="_blank" rel="noopener" href="https://github.com/AprilYoLies/snowflake" >snowflake<i class="fas fa-external-link-alt"></i></a>，是一个分布式的统一 id 生成器，能够生成 segment 和 snowflake 两种类型的 id。另外一个就是一个类似于 dubbo 的 rpc 框架 <a class="link"   target="_blank" rel="noopener" href="https://github.com/AprilYoLies/beehive" >beehive<i class="fas fa-external-link-alt"></i></a>，在我的 snowflake 项目中提供了内嵌模式的测试程序，它所使用的 rpc 框架就是我自己开发的 beehive，关于 beehive 我准备在我后边的文章中再作介绍，本篇就先详细介绍一下 snowflake 这个 id 生成器。</p>
+<h2 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h2><p>snowflake 是一款分布式的统一 ID 生成器，提供了两种 id 生成的方式，分段 id 和通过 snowflake 算法计算得到 id。在分段 id 的生成过程中，不同的服务器从数据库获取自己专属的 id 号段，再从该号段中来产生唯一 id，在从数据库中获取号段的过程中，通过数据库的事务机制，保证了不同的 id 服务器获取的号段是不重复的，所以能够保证全局的 id 唯一性。而 snowflake 算法计算 id 的方式稍微复杂，首先它并不是通过 id 隔段的方式来保证 id 的唯一性，而是通过各个 id 服务器的 machine id 来保证不同的服务器之间产生的 id 唯一性，此外，在单台 id 服务器之上，machine id 是唯一且不变的，要想产生唯一 id，就还需要其他的项来进行保证，snowflake 算法采用的是加上时间戳的方式，在本项目的实现中，提供了两种时间颗粒度的选择（秒和毫秒），对于计算机世界而言一秒和一毫秒而言，是很漫长的，在这样的时间颗粒度下很有可能会在同一个最小时间单元内生成多个 id，因为时间戳和 machine id 一致，所以在我们生成的 id 中，还需要一个额外的字段来保证在单位时间粒度中生成的 id 的唯一性，这就是序列号。snowflake 算法生成 id 相关的三个字段如上所述，更加详细的 id 模型请看下表：</p>
+<table>
+<thead>
+<tr>
+<th align="left">颗粒度</th>
+<th align="left">时间戳</th>
+<th align="left">序列号</th>
+<th align="left">machine id</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">秒</td>
+<td align="left">占用 31 位</td>
+<td align="left">占用 22 位</td>
+<td align="left">占用 10 位</td>
+</tr>
+<tr>
+<td align="left">毫秒</td>
+<td align="left">占用 41 位</td>
+<td align="left">占用 12 位</td>
+<td align="left">占用 10 位</td>
+</tr>
+</tbody></table>
+<p>从上表可以看出来两种颗粒度的 id 占用的长度都是 63 位数，刚好可以使用一个长整型数据来进行存储，剩余一位没有使用，方便以后拓展使用。对于秒颗粒度而言，一年 31536000 秒占用 25 位，时间戳剩余 6 位，也就是说这种方式产生的 id 能用 64 年（非精确计算），而序列号占用 22 位，折算后可以知道理论情况下，一秒内单台 id 服务器最多能生成 4194303 个 id。对于毫秒颗粒度而言，一年 31536000000 毫秒占用 35 位，剩余 6 位，同样可以使用 64 年（非精确计算），由于时间戳长度的增加导致序列号的长度被压缩为 12 位，这样理论情况下，单台 id 服务器一毫秒内最多能产生 4096 个 id。</p>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><h3 id="内嵌服务发布模式"><a href="#内嵌服务发布模式" class="headerlink" title="内嵌服务发布模式"></a>内嵌服务发布模式</h3><p>内嵌服务发布模式需要使用到 rpc 框架，在 snowflake 中用于产生 id 的服务接口为 <code>top.aprilyolies.snowflake.idservice.IdService</code>，可以看到它的实现类有两个，SegmentIdService 和 SnowflakeIdService，分别对应两种 id 的生成方式，他们的继承关系如下图：</p>
+<div style="text-align:center;"><img src="https://img.aprilyolies.top/img/typora/3028ad529899a66477d7b1c26bcba6d8.jpeg" width=500 /></div>
+
+<p>了解这个以后，我们便知道在 rpc 框架中，需要暴露的服务名称就是这个接口的全限定名。在服务端，除了要暴露服务外，还要指定对应的服务实现，这是我是通过 spring 的 FactoryBean 机制来避免直接构建 IdService 实现类，简单来说我们在使用 rpc 框架指定服务实现类时，不是直接使用的 IdService 实现类，而是通过 FactoryBean 来构建对应的 IdService 实现类，这么说可能有点绕，还是直接看示例程序比较合适，项目的工程结构如下：</p>
+<div style="text-align:center;"><img src="https://img.aprilyolies.top/img/typora/cb74453427824b8b49bcfa40553967a4.jpeg" width=250 /></div>
+
+<p>内嵌服务发布的实例程序就在 snowflake-demo 模块之下，再次说明这里我使用的是自己开发的 rpc 框架 beehive，如果你使用的是其他类型的 rpc 框架，方式也基本一致。先看服务发布端的 spring 配置文件：</p>
+<blockquote>
+<p>embed-server.xml</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="line">&lt;beans xmlns=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span><br><span class="line">       xmlns:xsi=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span><br><span class="line">       xmlns:beehive=<span class="string">&quot;https://www.aprilyolies.top/schema/beehive&quot;</span></span><br><span class="line">       xsi:schemaLocation=<span class="string">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd https://www.aprilyolies.top/schema/beehive https://www.aprilyolies.top/schema/beehive.xsd&quot;</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;bean class=<span class="string">&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;</span>&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;locations&quot;</span> value=<span class="string">&quot;classpath:snowflake.properties&quot;</span>/&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">    &lt;bean id=<span class="string">&quot;serviceFactory&quot;</span> class=<span class="string">&quot;top.aprilyolies.snowflake.idservice.IdServiceFactory&quot;</span>&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;machineIdProvider&quot;</span> value=<span class="string">&quot;ZOOKEEPER&quot;</span>/&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;idType&quot;</span> value=<span class="string">&quot;1&quot;</span>/&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;zkHost&quot;</span> value=<span class="string">&quot;119.23.247.86&quot;</span>/&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;dbUrl&quot;</span> value=<span class="string">&quot;jdbc:mysql://localhost:3306/snowflake&quot;</span>/&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;username&quot;</span> value=<span class="string">&quot;root&quot;</span>/&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;password&quot;</span> value=<span class="string">&quot;kuaile1..&quot;</span>/&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;serviceType&quot;</span> value=<span class="string">&quot;snowflake&quot;</span>/&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">    &lt;beehive:service id=<span class="string">&quot;idService&quot;</span> service=<span class="string">&quot;top.aprilyolies.snowflake.idservice.IdService&quot;</span></span><br><span class="line">                     ref=<span class="string">&quot;serviceFactory&quot;</span> proxy-factory=<span class="string">&quot;jdk&quot;</span> serializer=<span class="string">&quot;hessian&quot;</span> server-port=<span class="string">&quot;7442&quot;</span>/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;beehive:registry id=<span class="string">&quot;registry&quot;</span> address=<span class="string">&quot;zookeeper://119.23.247.86:2181&quot;</span>/&gt;</span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里的 &lt;beehive:service&#x2F;&gt; 标签是 beehive 用于发布服务的，它暴露的服务接口是 <code>top.aprilyolies.snowflake.idservice.IdService</code> 这里和我上边的说明一致。然后就是该服务的实现类指定，可以看到这里是设置的 <code>ref=&quot;serviceFactory&quot;</code>，它所对应的就是那个 IdService 工厂类，因为在构建 IdService 实现类时需要指定部分参数信息，所以这里我们还指定了一系列参数，具体的作用如下：</p>
+<p>根据生成的 id 的类型不同，参数的指定也不一样，如果你是要生成 segment 类型的 id，那么你只需要指定用于获取 id 段信息的数据库信息即可，也就是这三个。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;property name=<span class="string">&quot;dbUrl&quot;</span> value=<span class="string">&quot;jdbc:mysql://localhost:3306/snowflake&quot;</span>/&gt;</span><br><span class="line">&lt;property name=<span class="string">&quot;username&quot;</span> value=<span class="string">&quot;root&quot;</span>/&gt;</span><br><span class="line">&lt;property name=<span class="string">&quot;password&quot;</span> value=<span class="string">&quot;kuaile1..&quot;</span>/&gt;</span><br></pre></td></tr></table></figure>
+
+<p>需要在对应的数据库中提前创建 id 分段信息表，在项目的 scripts 目录下已提供 SEGMENT_ID_TABLE.sql 文件，内容如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> NAMES utf8mb4;</span><br><span class="line"><span class="keyword">SET</span> FOREIGN_KEY_CHECKS <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> `SEGMENT_ID_TABLE`;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `SEGMENT_ID_TABLE` (</span><br><span class="line">  `business` <span class="type">varchar</span>(<span class="number">40</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;业务类型&#x27;</span>,</span><br><span class="line">  `<span class="keyword">begin</span>` <span class="type">bigint</span>(<span class="number">40</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;起始ID&#x27;</span>,</span><br><span class="line">  `<span class="keyword">end</span>` <span class="type">bigint</span>(<span class="number">40</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;最大ID&#x27;</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`business`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>latin1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `SEGMENT_ID_TABLE` <span class="keyword">VALUES</span> (<span class="string">&#x27;order&#x27;</span>, <span class="number">519349</span>, <span class="number">524349</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `SEGMENT_ID_TABLE` <span class="keyword">VALUES</span> (<span class="string">&#x27;payment&#x27;</span>, <span class="number">51</span>, <span class="number">5051</span>);</span><br><span class="line"><span class="keyword">COMMIT</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SET</span> FOREIGN_KEY_CHECKS <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+
+<p>如果你要获取的是 snowflake 算法生成的 id，那么情况稍微复杂一点点，根据 snowflake id 的构成方式，我们可以知道唯一不能直接确定的就是 machine id，它需要借助于外部的条件来保证唯一性。根据 snowflake machine id 的获取方式不同可以将其配置分为三种。</p>
+<ul>
+<li>从数据库中获取 machine id<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;property name=<span class="string">&quot;idType&quot;</span> value=<span class="string">&quot;1&quot;</span>/&gt;</span><br><span class="line">&lt;property name=<span class="string">&quot;dbUrl&quot;</span> value=<span class="string">&quot;jdbc:mysql://localhost:3306/snowflake&quot;</span>/&gt;</span><br><span class="line">&lt;property name=<span class="string">&quot;username&quot;</span> value=<span class="string">&quot;root&quot;</span>/&gt;</span><br><span class="line">&lt;property name=<span class="string">&quot;password&quot;</span> value=<span class="string">&quot;kuaile1..&quot;</span>/&gt;</span><br><span class="line">&lt;property name=<span class="string">&quot;machineIdProvider&quot;</span> value=<span class="string">&quot;MYSQL&quot;</span>/&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>从数据库中获取 machine id 需要提前在对应数据库中创建对应的 machine id 映射表，在项目的 scripts 目录下已提供 SNOWFLAKE-MYSQL-MACHINE-ID.sql 文件，内容如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE snowflake;</span><br><span class="line"></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> if <span class="keyword">exists</span> MYSQL_MACHINE_ID_PROVIDER;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> MYSQL_MACHINE_ID_PROVIDER</span><br><span class="line">(</span><br><span class="line">    ID <span class="type">bigint</span> <span class="keyword">not</span> <span class="keyword">null</span>,</span><br><span class="line">    IP <span class="type">varchar</span>(<span class="number">64</span>) <span class="keyword">default</span> <span class="keyword">null</span>,</span><br><span class="line">    <span class="keyword">primary</span> key (ID),</span><br><span class="line">    <span class="keyword">unique</span> key UK_IP (IP)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">procedure</span> if <span class="keyword">exists</span> initMysqlMachineIdProvider;</span><br><span class="line"></span><br><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">procedure</span> initMysqlMachineIdProvider()</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">declare</span> count <span class="type">int</span>;</span><br><span class="line">    <span class="keyword">set</span> count <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">set</span> autocommit <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    LOOP_LABLE:</span><br><span class="line">        loop</span><br><span class="line">            <span class="keyword">insert</span> <span class="keyword">into</span> MYSQL_MACHINE_ID_PROVIDER(ID) <span class="keyword">values</span> (count);</span><br><span class="line">            <span class="keyword">set</span> count <span class="operator">=</span> count <span class="operator">+</span> <span class="number">1</span>;</span><br><span class="line">            if count <span class="operator">&gt;=</span> <span class="number">1024</span> <span class="keyword">then</span></span><br><span class="line">                leave LOOP_LABLE;</span><br><span class="line">            <span class="keyword">end</span> if;</span><br><span class="line">        <span class="keyword">end</span> loop;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">commit</span>;</span><br><span class="line">    <span class="keyword">set</span> autocommit <span class="operator">=</span> <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br><span class="line"></span><br><span class="line"><span class="keyword">call</span> initMysqlMachineIdProvider;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>从 zookeeper 获取 machine id</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;property name=<span class="string">&quot;idType&quot;</span> value=<span class="string">&quot;1&quot;</span>/&gt;</span><br><span class="line">&lt;property name=<span class="string">&quot;zkHost&quot;</span> value=<span class="string">&quot;119.23.247.86&quot;</span>/&gt;</span><br><span class="line">&lt;property name=<span class="string">&quot;machineIdProvider&quot;</span> value=<span class="string">&quot;ZOOKEEPER&quot;</span>/&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从本地配置文件获取 machine id（不建议，需要在 classpath 下创建 snowflake.properties 配置文件并指定 snowflake.machine.id&#x3D;1023 属性值，它将作为 machine id，在集群环境下，需要保证这个值唯一）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;property name=<span class="string">&quot;idType&quot;</span> value=<span class="string">&quot;1&quot;</span>/&gt;</span><br><span class="line">&lt;property name=<span class="string">&quot;machineIdProvider&quot;</span> value=<span class="string">&quot;PROPERTY&quot;</span>/&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>这里的 idType 就是指的 snowflake 算法生成的 id 的颗粒度（即在怎样的单位时长内，生成的 id 是单调有序的），0 代表在一秒内，生成的 id 是单调有序递增的，而 1 则代表在一毫秒的时间内，生成的 id 是单调有序递增的。</p>
+<p>在服务端的配置完成后，剩下的就是直接引用发布的服务了，配置很简单，我这里只是贴出来，不做说明。</p>
+<blockquote>
+<p>embed-client.xml</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="line">&lt;beans xmlns=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span><br><span class="line">       xmlns:xsi=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span><br><span class="line">       xmlns:beehive=<span class="string">&quot;https://www.aprilyolies.top/schema/beehive&quot;</span></span><br><span class="line">       xsi:schemaLocation=<span class="string">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd https://www.aprilyolies.top/schema/beehive https://www.aprilyolies.top/schema/beehive.xsd&quot;</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;beehive:registry id=<span class="string">&quot;registry&quot;</span> address=<span class="string">&quot;zookeeper://119.23.247.86:2181&quot;</span>/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;beehive:reference id=<span class="string">&quot;idService&quot;</span> service=<span class="string">&quot;top.aprilyolies.snowflake.idservice.IdService&quot;</span> load-balance=<span class="string">&quot;poll&quot;</span></span><br><span class="line">                       serializer=<span class="string">&quot;hessian&quot;</span> read-timeout=<span class="string">&quot;1000&quot;</span> retry-times=<span class="string">&quot;2&quot;</span>/&gt;</span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在实例程序中，我已经指定了 IdService 类型为 snowflake，且 machine id 的获取方式为 ZOOKEEPER，所以不需要使用到数据库，而且我指定的 zookeeper 地址为我的阿里云地址，正常情况下，我会开启 zookeeper 服务，这样你直接运行 server 端和 client 端程序就能看到结果。</p>
+<h3 id="独立运行模式"><a href="#独立运行模式" class="headerlink" title="独立运行模式"></a>独立运行模式</h3><p>独立运行模式采用手动直接构建 IdService 的方式，这种方式更加灵活，我们只需要指定几个和 id service 相关的参数，然后就能通过 IdServiceFactory 类来拿到 IdService 实例，至于怎么使用这个 IdService，完全由你决定，就像我在项目中给出的两个 restful 风格的 id 生成方式，一个是通过 Springboot 构建的 web 应用来进行访问，另外一个就是通过 Netty 服务器来提供访问支持。参数的配置方式和内嵌服务发布模式完全一致，只不过是一个配置文件是 xml，一个配置文件是 properties。</p>
+<p>就直接那 netty 的实例程序来说明吧，我们根本就是要得到 IdService 的实例，在 IdServiceFactory 类中提供了一个公有静态方法 <code>public static IdService buildIdService(ClassLoader classLoader, String serviceType, String confPath) </code>，我们可以直接通过该方法来获取 IdService 实例，三个参数需要指定，classloader 类加载器，需要保证这个类加载器能够加载到你的配置文件，serviceType 服务类型，固定为 segment 或者 snowflake，指定其它参数会报错，最后一个就是你的配置文件路径，里边的内容如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">snowflake.machine.id=<span class="number">1023</span></span><br><span class="line">snowflake.machine.id.provider=ZOOKEEPER</span><br><span class="line">snowflake.id.type=<span class="number">0</span></span><br><span class="line">snowflake.zookeeper.host=<span class="number">119.23</span><span class="number">.247</span><span class="number">.86</span></span><br><span class="line">snowflake.database.url=jdbc:mysql:<span class="comment">//localhost:3306/snowflake</span></span><br><span class="line">snowflake.database.username=root</span><br><span class="line">snowflake.database.password=kuaile1..</span><br></pre></td></tr></table></figure>
+
+<p>跟上边介绍的一样，里边的配置不是非得全写，根据自己的需求指定几条必须的参数即可。该方法的返回值就是 IdService 实例，就像示例程序的 SnowflakeChannelHandler 返回的那样。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SnowflakeIdService 实例</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">IdService</span> <span class="variable">snowIdService</span> <span class="operator">=</span> IdServiceFactory.buildIdService(SnowflakeChannelHandler.class.getClassLoader(), <span class="string">&quot;snowflake&quot;</span>, <span class="string">&quot;snowflake.properties&quot;</span>);</span><br><span class="line"><span class="comment">// SegmentIdService 实例</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">IdService</span> <span class="variable">segIdService</span> <span class="operator">=</span> IdServiceFactory.buildIdService(SnowflakeChannelHandler.class.getClassLoader(), <span class="string">&quot;segment&quot;</span>, <span class="string">&quot;snowflake.properties&quot;</span>);</span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+
+<h2 id="测试运行"><a href="#测试运行" class="headerlink" title="测试运行"></a>测试运行</h2><h3 id="内嵌服务发布模式测试"><a href="#内嵌服务发布模式测试" class="headerlink" title="内嵌服务发布模式测试"></a>内嵌服务发布模式测试</h3><p>因为测试程序依赖了我开发的 beehive rpc 框架，这个在 maven 中央仓库无法直接下载，需要先手动进行安装该依赖，具体方法就是执行如下指令，这样在你的本地 maven 仓库就会存在该依赖了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/AprilYoLies/beehive.git</span><br><span class="line"><span class="built_in">cd</span> beehive</span><br><span class="line">mvn clean install -Dmaven.test.skip=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>然后启动服务端，执行 nowflake-demo&#x2F;embed-server 模块下 <code>top.aprilyolies.snowflake.EmbedServer</code> 类的 main 方法，如果启动成功，那么就表示服务已发布。</p>
+<p>接着启动客户端，执行 snowflake-demo&#x2F;embed-client 模块下 <code>top.aprilyolies.snowflake.EmbedClient</code> 类的 main 方法，如果出现如下结果，就表示服务调用成功。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">14108116920565761</span></span><br><span class="line"><span class="number">14108116970897409</span></span><br><span class="line"><span class="number">14108116979286017</span></span><br><span class="line"><span class="number">14108116983480321</span></span><br><span class="line"><span class="number">14108116991868929</span></span><br><span class="line"><span class="number">14108116996063233</span></span><br><span class="line"><span class="number">14108117004451841</span></span><br><span class="line"><span class="number">14108117008646145</span></span><br><span class="line"><span class="number">14108117017034753</span></span><br><span class="line"><span class="number">14108117021229057</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="独立运行模式测试"><a href="#独立运行模式测试" class="headerlink" title="独立运行模式测试"></a>独立运行模式测试</h3><p>独立运行模式提供了两个 Server 端，随便启动一个就行，以 NettyServer 为例，执行 snowflake-server&#x2F;snowflake-netty 模块下 <code>top.aprilyolies.snowflake.SnowflakeServer</code> 类的 main 方法，如果启动成功，就会日志打印请求的路径如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">210</span> [main] INFO top.aprilyolies.snowflake.SnowflakeServer - Snowflake netty server started on port <span class="number">6707.</span></span><br><span class="line"><span class="number">210</span> [main] INFO top.aprilyolies.snowflake.SnowflakeServer - Get segment id by http:<span class="comment">//localhost:6707/snowflake/seg/business-name</span></span><br><span class="line"><span class="number">210</span> [main] INFO top.aprilyolies.snowflake.SnowflakeServer - Get snowflake id by http:<span class="comment">//localhost:6707/snowflake/snow</span></span><br></pre></td></tr></table></figure>
+
+<p>访问两个链接中的任意一条就会得到对应的 id。</p>
+<h2 id="TODO-LIST"><a href="#TODO-LIST" class="headerlink" title="TODO-LIST"></a>TODO-LIST</h2><ul>
+<li><p>在通过 snowflake 算法生成 id 时，由于需要通过时间戳来生成 id，这就有可能会因为某一个机器的时间发生回拨，导致这台机器产生出重复的 id，有两种解决办法，一个是在每次生成 id 时，都检查一次当前时间戳是否比上一次生成 id 的时间戳小，如果条件成立，就拒绝 id 生成，这种方式的好处是，在服务不重启的情况下也能检查出这种问题，缺陷是获取当前时间戳和时间比对是一个耗时操作，会导致吞吐量下降。另外一种方式是每隔一小段时间向数据库中写入当前机器生成 id 的时间戳，在服务重启时需要先检查当前时间戳是否比上一次生成 id 的时间戳小，如果成立，则拒绝启动服务，这种做法能够避免服务重启时的时间回拨问题，但是如果服务是在运行中，发生时间回拨，这种方式将会产生错误。</p>
+</li>
+<li><p>在 segment 方式生成 id 的过程中，代码是使用的硬编码方式将 step 值写死，对于不同的应用场景，可能该步进值并不合适，最好是系统能够根据两次获取 id 段的时间差来自动调整步进值，这样能够动态的缓解 id 段服务数据库的压力。</p>
+</li>
+<li><p>可以再为系统增加一个可视化管理界面，能够直观的看到不同业务的 id 段使用情况，以及 id 段缓存的使用情况。</p>
+</li>
+</ul>
+
+        </div>
+
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">#分布式</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2019/07/18/%E8%BD%BB%E9%87%8F%E7%BA%A7RPC%E6%A1%86%E6%9E%B6BEEHIVE%E4%BB%8B%E7%BB%8D/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">轻量级RPC框架BEEHIVE介绍</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2019/05/26/%E7%9C%8BDubbo%E6%BA%90%E7%A0%81%E6%80%BB%E7%BB%93%E5%87%BA%E6%9D%A5%E7%9A%84%E9%82%A3%E4%BA%9B%E5%B0%8F%E6%8A%80%E5%B7%A7/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">看Dubbo源码总结出来的那些小技巧</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">小橘子🍊</a>
+        </div>
+        
+            <script async  src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        访问人数&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">基本介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%B5%8C%E6%9C%8D%E5%8A%A1%E5%8F%91%E5%B8%83%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">内嵌服务发布模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8B%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.2.</span> <span class="nav-text">独立运行模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E8%BF%90%E8%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">测试运行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%B5%8C%E6%9C%8D%E5%8A%A1%E5%8F%91%E5%B8%83%E6%A8%A1%E5%BC%8F%E6%B5%8B%E8%AF%95"><span class="nav-number">4.1.</span> <span class="nav-text">内嵌服务发布模式测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8B%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F%E6%B5%8B%E8%AF%95"><span class="nav-number">4.2.</span> <span class="nav-text">独立运行模式测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TODO-LIST"><span class="nav-number">5.</span> <span class="nav-text">TODO-LIST</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+</body>
+</html>
