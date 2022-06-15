@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Java 后端">
+    <meta name="description" content="小橘子🍊的个人主页，欢迎访问~~">
+    <meta name="author" content="小橘子🍊">
+    
+    <title>
+        
+            OpenWrt系列之编译安装OpenWrt系统 |
+        
+        AprilYoLies
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="https://img.aprilyolies.top/img/typora/avatar.jpg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"aprilyolies.top","root":"/","language":"zh-CN","path":"search.json"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"https://img.aprilyolies.top/img/typora/avatar.jpg","favicon":"https://img.aprilyolies.top/img/typora/avatar.jpg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"干燥的空气，尘埃的味道，我在其中…踏上旅途！"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+  </script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="https://img.aprilyolies.top/img/typora/avatar.jpg">
+                </a>
+            
+            <a class="logo-title" href="/">
+                AprilYoLies
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                关于
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">关于</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">OpenWrt系列之编译安装OpenWrt系统</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="https://img.aprilyolies.top/img/typora/avatar.jpg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">小橘子🍊</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-06-08 23:10:23</span>
+        <span class="mobile">2022-06-08 23:10</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/openwrt/">openwrt</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/openwrt/">openwrt</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/linux/">linux</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h2 id="OpenWrt-简介"><a href="#OpenWrt-简介" class="headerlink" title="OpenWrt 简介"></a>OpenWrt 简介</h2><p>OpenWrt是适合于嵌入式设备的一个Linux发行版。 相对原厂固件而言，OpenWrt不是一个单一、静态的固件，而是提供了一个可添加软件包的可写的文件系统。这使用户可以自由的选择应用程序和配置，而不必受设备提供商的限制，并且可以使用一些适合某方面应用的软件包来定制你的设备。</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/zh-hans/OpenWrt" >OpenWrt - 维基百科<i class="fas fa-external-link-alt"></i></a> </p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://openwrt.org/" >OpenWrt Project<i class="fas fa-external-link-alt"></i></a> </p>
+<h2 id="OpenWrt-系统编译"><a href="#OpenWrt-系统编译" class="headerlink" title="OpenWrt 系统编译"></a>OpenWrt 系统编译</h2><p>选择自己编译 OpenWrt 系统的最大好处，一方面就是可以最大程度的个性化 OpenWrt 系统，直接使用别人编译好的固件难免会缺少或者冗余功能。另一方面自己编译 OpenWrt 系统可以极大的提升自己的动手能力，同时还能对 linux 系统的编译有个简单的了解。</p>
+<p>我自己有一台 Ubuntu 系统（CentOS 应该可以）的服务器，并且有自己的科学上网梯子（编译 OpenWrt 的过程需要下载众多依赖包，如果没有科学上网，编译过程大概率失败），因此编译过程比较顺利。如果缺少这两项必要条件，那就可以借助于 Github 的 Action 在线编译功能来编译自己的 OpenWrt 系统，该方式也是我最近才了解到的。</p>
+<p>本文会对本地编译和云编译两种方式都进行介绍，原理都是一样，最终编译出来的固件没有任何区别。</p>
+<h3 id="本地编译-OpenWrt-系统"><a href="#本地编译-OpenWrt-系统" class="headerlink" title="本地编译 OpenWrt 系统"></a>本地编译 OpenWrt 系统</h3><p>就像上文说的，本地编译需要一台 Ubuntu 系统的服务器以及科学上网，服务器选择物理的机器或者是虚拟机都是可以的，只是编译速度有区别，科学上网那就自行想办法吧~~都 2022 年了不会还有人不会科学上网吧【狗头保命】？？实在没有那就选择方式二吧，最终结果都是一样的，并且成功率高很多。OpenWrt 的源码选择的是 L 大大的，感谢大佬提供的如此优秀的<a class="link"   target="_blank" rel="noopener" href="https://github.com/coolsnowwolf/lede" >源码<i class="fas fa-external-link-alt"></i></a> ，Salute ~~</p>
+<p>好吧，说了很多废话，还是进入正题，开始编译 OpenWrt 系统。</p>
+<ol>
+<li><p>编译环境准备</p>
+<p>输入如下命令，该命令主要是安装了一堆 linux 环境下的命令以及编译过程中需要依赖的库。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update -y</span><br><span class="line">sudo apt full-upgrade -y</span><br><span class="line">sudo apt install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \</span><br><span class="line">bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib \</span><br><span class="line">git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev \</span><br><span class="line">libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz \</span><br><span class="line">mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pip qemu-utils \</span><br><span class="line">rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载 OpenWrt 源码</p>
+<p>使用如下命令下载源码，需要服务器已安装 git，如果服务器没有安装 git 那就自行百度安装一个。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载 OpenWrt 源码</span></span><br><span class="line">git clone https://github.com/coolsnowwolf/lede</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载默认的插件</p>
+<p>使用如下命令下载 L 大大默认整理好的一些 OpenWrt 插件，看 feeds 这个脚本中 <code>parse_config</code> 函数的实现就知道它默认就是去下载了 <code>feeds.conf.default</code> 这个文件中定义的一些仓库地址的源码。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd lede</span><br><span class="line">./scripts/feeds update -a</span><br><span class="line">./scripts/feeds install -a</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加需要的插件（可选）</p>
+<p>下载的源码中没有”酸酸乳”（全局科学上网）插件，并且默认提供的 Argon 主题有点小丑，所以这里就需要自行添加或者替换一下，如果没有这种需求的那就跳过这步吧。</p>
+<ul>
+<li>添加”酸酸乳”插件</li>
+</ul>
+<p>修改 OpenWrt 源码目录下的 <code>feeds.conf.default</code> 文件，在其中添加 [酸酸乳](src-git helloworld <a class="link"   target="_blank" rel="noopener" href="https://github.com/fw876/helloworld" >https://github.com/fw876/helloworld<i class="fas fa-external-link-alt"></i></a>) 的仓库地址。注：修改完成后需要重新执行一下步骤 3 的命令。</p>
+<p><img src="https://img.aprilyolies.top/img/typora/202206102236503.png" alt="image-20220610223612453"> </p>
+<p>如果不想修改 <code>feeds.conf.default</code> 文件，并执行第 3 步，那就直接使用下边的命令搞定吧，跟上边的效果是一样的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载<span class="string">&quot;酸酸乳&quot;</span>到 OpenWrt 源码的 package/feeds/ 路径下</span></span><br><span class="line">git clone https://github.com/fw876/helloworld/ package/feeds/helloworld</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>替换原始的 Argon 主题</li>
+</ul>
+<p>一条命令搞定，使用的效果见下图（真心好看）~~</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除原始的 Argon 主题</span></span><br><span class="line">rm feeds/luci/themes/luci-theme-argon/</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载下图的 Argon 主题</span></span><br><span class="line">git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git feeds/luci/themes/luci-theme-argon</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">tips：写这个文章的时候突然想到的，是不是可以通过进入 feeds/luci/themes/luci-theme-argon/ 这个路径下，然后切换 18.06 分支得到同样的效果？？</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.aprilyolies.top/img/typora/202206102205362.png" alt="image-20220610220536190"> </p>
+</li>
+<li><p>OpenWrt 编译插件配置</p>
+<p>这个步骤就是去客制化你的 OpenWrt 系统，涉及的内容非常多，除了定制 OpenWrt 固件的插件以外，还能对 OpenWrt 的 linux 内核进行配置，还能修改编译结果的目标平台（ARM 还是 x86 还是其它），还能定制化一些需要的驱动模块。它决定了你的固件能在什么硬件平台运行，能够支持哪些外围的硬件设备（网卡、键盘、声卡）等。</p>
+<p>好吧，恕我才疏学浅，对于 linux 内核的客制化不太了解，只能这样简单肤浅的解释一下了，好在 L 大大源码默认的 linux 内核配置部分已经能够满足编译出来的固件在 x86 平台跑起来，我们就只需要重点关注下 OpenWrt 直接相关的一些配置。</p>
+<p>输入如下命令可以进入编译的配置界面，界面如下图：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">OpenWrt 编译配置</span></span><br><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.aprilyolies.top/img/typora/202206102317163.png" alt="image-20220610231735109"> </p>
+<ul>
+<li>修改目标固件大小</li>
+</ul>
+<p>默认情况下，OpenWrt 编译出来的固件大小应该是在180MB 左右，除去 linux 内核本身占用的空间以及根文件系统中的一些系统文件外，实际可供用户使用的空间是非常小的，因此需要在编译之前修改一下固件大小（虽然可以通过后期调整磁盘分区大小的方式来扩容，但是需要我们准备 U 盘启动的 linux 系统，过程稍微麻烦，如果感兴趣可以尝试下）。</p>
+<p>固件大小的修改在 <code>Target Images</code> 菜单下，<code>Kernel partition size</code> 用于指定内核大小，通常只要不是把一些驱动模块编译进内核中，linux 内核本身是非常小的，32MB 应该是足以。<code>Root filesystem partition size</code> 用于指定根文件系统大小，这个大小减去系统默认使用的那部分空间后，剩余的就是你能使用的大小，这个值自己考虑，但是也别填太大了，通常 2GB 足以。</p>
+<p><img src="https://img.aprilyolies.top/img/typora/202206102336851.png" alt="image-20220610233600810"> </p>
+<ul>
+<li>添加 IPv6 支持</li>
+</ul>
+<p>使用 OpenWrt 软路由的一个典型场景就是通过公网 IP 地址随时”回家”，由于公网 IPv4 地址的数量有限，因此家庭在办理宽带时通常是不给分配公网 IPv4 地址的，或者是需要拨打运营商电话，要求开通公网 IPv4 地址的业务（不一定能申请到）。当前各大运营商基本都已经支持 IPv6，只要你的设备支持就能获取到公网的 IPv6 地址。OpenWrt 的 IPv6 特性开关位于 <code>Extra packages  ---&gt; ipv6helper</code> ，勾选该项就能启用 IPv6 的支持。</p>
+<p><img src="https://img.aprilyolies.top/img/typora/202206112008636.png" alt="image-20220611200827552"> </p>
+<ul>
+<li>个性化插件配置</li>
+</ul>
+<p>OpenWrt 的插件配置位于 <code>LuCI  ---&gt;  Applications</code> 目录下，可以看到里边有超级多插件，关于这些插件的功能可以参考这个<a class="link"   target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-344825-1-2.html" >链接<i class="fas fa-external-link-alt"></i></a> 。默认情况下添加的插件就已经满足我们大多数人的使用场景了，但是我这里还是强烈推荐大家添加如下几个插件，至于其它那就根据个人需求来添加吧。</p>
+<table>
+<thead>
+<tr>
+<th>插件名</th>
+<th>插件作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>luci-app-docker</td>
+<td>通过下载各种开源的 docker 镜像，强化 OpenWrt 的功能</td>
+</tr>
+<tr>
+<td>luci-app-socat</td>
+<td>配合公网 IPv6 地址进行到内网 IPv4 地址的转发</td>
+</tr>
+<tr>
+<td>luci-app-ssr-plus</td>
+<td>“酸酸乳”科学上网</td>
+</tr>
+<tr>
+<td>luci-app-ttyd</td>
+<td>OpenWrt 系统的终端登录服务</td>
+</tr>
+<tr>
+<td>luci-app-watchcat</td>
+<td>监控 OpenWrt 的网络状态，自动重启</td>
+</tr>
+<tr>
+<td>luci-app-wol</td>
+<td>网络唤醒，实现远程开机</td>
+</tr>
+</tbody></table>
+<p>对了，我们自行添加的 Argon 主题需要确保 luci-theme-argon 被勾选，它位于 <code>LuCI  ---&gt;  Themes</code> 下。</p>
+<p>以上就是我根据自己的需求对 OpenWrt 系统进行的客制化配置，其它的配置可以再自行探索，完成配置后记得左右方向键选中配置界面底部的 Save 按钮对配置项进行保存，然后再 Exit 退出配置界面，此时就会在源码目录下生成 <code>.config</code> 文件，这个文件就是我们对 OpenWrt 系统进行客制化修改后的编译配置文件，它决定了我们最终生成的固件是怎样的。</p>
+</li>
+<li><p>启动编译固件</p>
+<p>输入如下命令就好，第一个命令用于下载 OpenWrt 系统的一些依赖包，比如 busybox（一些常用的命令就包含在里边），第二个命令正式编译 OpenWrt 系统。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载 OpenWrt 系统软件包，比如 busybox</span></span><br><span class="line">make download -j8</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">编译 OpenWrt 系统</span></span><br><span class="line">make -j$(($(nproc) + 1)) V=s</span><br></pre></td></tr></table></figure>
+
+<p>整个的编译过程非常的耗时，当然也取决于你的机器性能，编译完成后生成的固件位于 <code>bin/targets/x86/64</code> 路径下，<code>openwrt-x86-64-generic-kernel.bin</code> 是 linux 内核，<code>openwrt-x86-64-generic-squashfs-combined-efi.img</code> 是我们期望得到的固件文件，<code>openwrt-x86-64-generic-squashfs-combined-efi.vmdk</code> 虚拟机镜像，我们可以直接在 vmware 上运行这个镜像，<code>openwrt-x86-64-generic-squashfs-rootfs.img</code> 根文件系统。</p>
+<p><img src="https://img.aprilyolies.top/img/typora/202206142208162.png" alt="image-20220614220806061"></p>
+</li>
+</ol>
+<h3 id="在线编译-OpenWrt-系统"><a href="#在线编译-OpenWrt-系统" class="headerlink" title="在线编译 OpenWrt 系统"></a>在线编译 OpenWrt 系统</h3><p>在线编译 OpenWrt 系统借助的是 Github 的 <a class="link"   target="_blank" rel="noopener" href="https://github.com/features/actions" >Action<i class="fas fa-external-link-alt"></i></a> 特性，它本质就是一个流水线，当我们把需要做的工作定义好后，Github 就会按照我们定义的流程来完成一系列工作，编译的服务器就是 Github 的服务器集群，所以性能是杠杠滴，另外编译过程不会受 GFW 的影响导致部分依赖包下载失败，因此编译成功率高高滴。</p>
+<p>基于 Action 的编译流程现在已经有人开源到了 Github，并且具体的使用方式也已经写的很详细了，参见这个<a class="link"   target="_blank" rel="noopener" href="https://p3terx.com/archives/build-openwrt-with-github-actions.html" >链接<i class="fas fa-external-link-alt"></i></a> ，我这里就不再赘述了，只是简单提醒一下如果对于编译配置的 .config 文件的生成不太了解，可以参考本文 <code>本地编译 OpenWrt 系统</code> 小节的 1-5 步。我本人基于这个流水线工程个性化修改后的 <a class="link"   target="_blank" rel="noopener" href="https://github.com/AprilYoLies/openwrt-ci" >仓库<i class="fas fa-external-link-alt"></i></a> 也贴出来，各位可以进行参考。</p>
+<h2 id="OpenWrt-系统安装"><a href="#OpenWrt-系统安装" class="headerlink" title="OpenWrt 系统安装"></a>OpenWrt 系统安装</h2><p>安装 OpenWrt 系统需要用到一些重装系统的知识，如果你会使用 U 盘重装电脑系统，那剩下的工作就很简单了，如果你不会（能看到这篇文章的人没有不会重装系统的吧，狗头保命~~），那就请自行在 B 站找一些相关的视频看看，我这里就默认你能够制作 U 盘启动盘，并且能够从 U 盘启动进入到 PE 系统。</p>
+<p>安装 OpenWrt 系统需要使用到一个磁盘写盘工具，用于将我们的固件写到磁盘上，请提前 <a class="link"   target="_blank" rel="noopener" href="http://www.pc6.com/softview/SoftView_118400.html" >下载<i class="fas fa-external-link-alt"></i></a> 好写盘工具，并将其与我们的固件 <code>openwrt-x86-64-generic-squashfs-combined-efi.img</code> 一同放到 U 盘启动盘中，然后进入 PE 系统。</p>
+<p><img src="https://img.aprilyolies.top/img/typora/202206152318936.png" alt="image-20220615231835853"> </p>
+<p>写盘之前先对软路由的硬盘进行清理，即删除所有分区，这个过程会删除目标硬盘的所有文件，请自行提前备份数据，参考下图：</p>
+<ol>
+<li>选择需要安装 OpenWrt 的硬盘，切记操作的过程中不要选错硬盘了！！</li>
+<li>选中需要删除的分区，点击右键</li>
+<li>弹出的选项框中，点击删除当前分区</li>
+</ol>
+<p>确保目标硬盘的所有分区都删除后，点击菜单栏 <code>分区 -&gt; 保存分区表</code> ，此时硬盘就算清理完成。</p>
+<p><img src="https://img.aprilyolies.top/img/typora/202206152328057.png" alt="image-20220615232849994"> </p>
+<p>刷固件请打开我们提前准备好的磁盘写盘工具，按照下图的步骤进行操作：</p>
+<ol>
+<li>选择映像写入</li>
+<li>选择目标硬盘，即我们刚刚清理完成的硬盘</li>
+<li>浏览，选择我们自行编译的固件 <code>openwrt-x86-64-generic-squashfs-combined-efi.img</code> </li>
+<li>确认信息无误后，点击开始</li>
+</ol>
+<p>这个过程非常迅速，待固件写入完成后，即可关闭写盘工具，然后拔掉 U 盘重启系统了，不出意外此时设备就会进入 OpenWrt 系统了。</p>
+<p><img src="https://img.aprilyolies.top/img/typora/202206152337409.jpg" alt="Xnip2022-06-15_23-36-36"> </p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>以上就是本文的所有内容了，我们从源码编译得到了自己定制化的 OpenWrt 固件，并将其安装到软路由设备上运行，整个过程是不是小有成就感呢？？当然 OpenWrt 系统运行起来还只是第一步，对 OpenWrt 系统进行配置，以满足自己的需求是我们后续要做的事情，有空之后我会写篇关于 OpenWrt 配置的文章，敬请期待喽。</p>
+
+        </div>
+
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/openwrt/">#openwrt</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/linux/">#linux</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/05/01/%E5%9F%BA%E4%BA%8EHexo%E6%9E%84%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%B9%B6%E9%83%A8%E7%BD%B2Github/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">基于Hexo构建个人博客并部署Github</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">小橘子🍊</a>
+        </div>
+        
+            <script async  src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        访问人数&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenWrt-%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">OpenWrt 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenWrt-%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91"><span class="nav-number">2.</span> <span class="nav-text">OpenWrt 系统编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E7%BC%96%E8%AF%91-OpenWrt-%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.1.</span> <span class="nav-text">本地编译 OpenWrt 系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%BA%BF%E7%BC%96%E8%AF%91-OpenWrt-%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.2.</span> <span class="nav-text">在线编译 OpenWrt 系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenWrt-%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85"><span class="nav-number">3.</span> <span class="nav-text">OpenWrt 系统安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E5%B0%BE"><span class="nav-number">4.</span> <span class="nav-text">结尾</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+</body>
+</html>
